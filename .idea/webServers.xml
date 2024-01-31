@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="785a9bb7-b4f2-416c-afc3-0e8e47a278cb" name="Snellius" url="http://snellius.suf.nl/home/wmohammed">
+        <fileTransfer rootFolder="/home/wmohammed" accessType="SFTP" host="snellius.surf.nl" port="22" sshConfigId="f27b4478-bf47-496b-8aee-4038029be435" sshConfig="wmohammed@snellius.surf.nl:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
