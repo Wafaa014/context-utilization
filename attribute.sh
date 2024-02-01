@@ -2,7 +2,7 @@
 #SBATCH --partition=gpu //use gpu partition
 #SBATCH --gres=gpu:1 //the amount of gpu for your job
 #SBATCH --ntasks=1 //number of parallel tasks // [OPTIONAL] list of specific nodes to use
-#SBATCH --exclude=ilps-cn111 // [OPTIONAL] list of specific nodes to exclude
+#SBATCH --exclude=// [OPTIONAL] list of specific nodes to exclude
 #SBATCH --cpus-per-task=1 //specify the number of cpus
 #SBATCH --mem=32G //the amount of CPU mem
 #SBATCH --time=2-10 //formatted running time. Avaliable specifiers: "days-hours", "days-hours:minutes" and "days-hours:minutes:seconds". Default limit is 1h!
