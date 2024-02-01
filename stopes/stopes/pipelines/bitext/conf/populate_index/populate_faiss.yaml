@@ -1,0 +1,11 @@
+_target_: stopes.modules.bitext.indexing.populate_faiss_index.PopulateFAISSIndexModule
+config:
+  lang: ???
+  index: ???
+  index_type: ???
+  embedding_files: ???
+  data: ???
+  output_dir: index.${.data.data_version}
+  num_cpu: 40
+  embedding_dimensions: 1024
+  enable_checkpointing: False

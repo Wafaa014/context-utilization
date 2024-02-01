@@ -1,0 +1,16 @@
+# @package _global_
+demo_dir: ???
+DATADIR: ${demo_dir}
+
+is_multilingual: False
+is_multi_encoder: False
+checkpoint:  ${demo_dir}/checkpoint_best.pt
+data_dir: ${demo_dir}
+#spm: ${demo_dir}/sentence.bpe.model
+src_col: src
+tgt_col: mt
+src_ctx_col: src_ctx
+tgt_ctx_col: tgt_ctx
+src_ante_col: src_ante
+tgt_ante_col: tgt_ante
+use_gpu: True

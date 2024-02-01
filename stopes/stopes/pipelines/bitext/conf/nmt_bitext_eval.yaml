@@ -1,0 +1,71 @@
+defaults:
+  # base configs for the sub modules
+  - train_spm: standard_conf
+  - binarize: standard_conf
+  - moses: standard_conf
+  - moses_filter: standard_conf
+  - launcher: submitit
+  - train_fairseq: nmt
+  - eval: generate_multi_bleu_detok
+  - _self_
+
+
+src_lang: ???
+tgt_lang: ???
+# this is the bitext being evaluated. It should have 3 columns: (score, src, tgt)
+# global_mining_pipeline output files in this format.
+bitext_tsv: ???
+test_data_dir: ???
+valid_data_dir: ???
+work_dir: ./nmt_bitext_eval
+public_bitext_base_dir: null
+public_corpora_to_ignore: []
+bitext_threshold: 0.0
+maximum_epoch: 100
+max_tsv_lines: 100_000_000
+moses_clean_corpus: false
+
+# override the sub module configs with the parents
+moses:
+  lowercase: False
+  output_dir: ${work_dir}/data_text_${config_sha:}
+moses_filter:
+  output_dir: ${work_dir}/data_text_clean_${config_sha:}
+
+train_spm:
+  output_dir: ${work_dir}/spm_${config_sha:}
+  vocab_size: 7_000
+
+binarize:
+  output_dir: ${work_dir}/data_bin
+
+train_fairseq:
+  output_dir: ${work_dir}/checkpoint_${config_sha:}
+  num_gpus: 16
+  timeout_min: 1_440
+  params:
+    common:
+      wandb_project: bitext_eval
+    dataset:
+      batch_size: 32
+      dataset_impl: ${binarize.line_processor.dataset_impl}
+    task:
+      data: ${work_dir}/fairseq_data
+      source_lang: ${src_lang}
+      target_lang: ${tgt_lang}
+      eval_bleu: true
+      eval_bleu_print_samples: true
+      eval_bleu_remove_bpe: sentencepiece
+    optimization:
+      max_epoch: ${maximum_epoch}
+    distributed_training:
+      # I'm seeing issues with c10d backend, I'm not sure what's the root cause
+      ddp_backend: no_c10d
+
+eval:
+  src_lang: ${src_lang}
+  tgt_lang: ${tgt_lang}
+  output_dir: ${work_dir}/eval_${config_sha:}
+
+launcher:
+  log_folder: ${work_dir}/logs

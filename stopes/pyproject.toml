@@ -1,0 +1,133 @@
+[build-system]
+requires = ["flit_core >=3.2,<4", "setuptools"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "stopes"
+readme = "README.md"
+authors = [{name = "Facebook AI Research"}]
+requires-python = ">=3.8"
+dynamic = ["version", "description"]
+
+dependencies = [
+  "hydra-core>=1.2.0",
+  "submitit>=1.4.5",
+  "tqdm",
+  "joblib",
+]
+# zip_safe = false
+classifiers=[
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering",
+    "Development Status :: 4 - Beta",
+]
+
+[project.urls]
+  Source = "https://github.com/facebookresearch/stopes"
+  Tracker = "https://github.com/facebookresearch/stopes/issues"
+
+[project.optional-dependencies]
+  mono = [
+    "xxhash",
+    "fasttext",
+    "sentence_splitter",
+    # "kenlm",
+    "sacremoses",
+    "sentencepiece",
+    "indic-nlp-library",
+    "emoji",
+  ]
+  mining = [
+    "requests",
+    "fairscale",
+#    "fairseq==0.12.1",
+    "faiss-cpu",
+    "sentencepiece",
+    "numpy>=1.21",
+  ]
+  mining_gpu = [
+    "faiss-gpu",
+  ]
+  speech_mining = [
+    "torchaudio",
+  ]
+  dev = [
+      # Test
+      "pytest>=4.3.0",
+      "pytest-asyncio>=0.15.0",
+      "pytest-cov>=2.6.1",
+      "coverage[toml]>=5.1",
+      # Format
+      "black==22.3.0",
+      "isort>=5.10.1",
+      # Linters
+      "mypy>=0.782",
+      "types-emoji",
+      "pylint>=2.8.0",
+      # Release
+      "flit>=3.5.1"
+  ]
+  hmine = [
+    "bs4",
+    "func_argparse",
+    "nltk",
+    "pandas",
+    "scipy",
+    "sklearn",
+    "xxhash",
+  ]
+  blaser = [
+    "spicy",
+    "numpy",
+    "torch",
+  ]
+  alti = [
+    "einops",
+    "numpy",
+    "omegaconf",
+    "torch",
+    # fairseq is also a dependency, but it must be installed separately
+  ]
+
+[tool.black]
+# Black defaults are great !
+
+[tool.isort]
+profile = "black"
+skip_gitignore = true
+skip_glob = ["website/*", "*.pyx"]
+
+[tool.mypy]
+python_version = "3.8"
+show_error_codes = true
+check_untyped_defs = true
+
+files = [
+  "stopes/"
+]
+
+[[tool.mypy.overrides]]
+module = [
+  "boto3",
+  "botocore",
+  "fairseq.*",
+  "faiss",
+  "fasttext",
+  "omegaconf",
+  "sagemaker",
+  "sentencepiece",
+  "tqdm.*",
+  "wandb",
+  "xxhash",
+]
+ignore_missing_imports = true
+
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["stopes"]
+python_files = [
+  "test_*.py",
+  "monolingual/utils/*.py"
+]
+asyncio_mode = "auto"

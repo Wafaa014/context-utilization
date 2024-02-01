@@ -1,0 +1,9 @@
+_target_: stopes.modules.bitext.indexing.merge_faiss_indexes.MergeFAISSIndexesModule
+config:
+  lang: ???
+  index_type: ???
+  indexes: ???
+  data: ???
+  expected_line_count: ???
+  output_dir: index.${.data.data_version}
+  enable_checkpointing: False

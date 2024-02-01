@@ -1,0 +1,85 @@
+defaults:
+  # base configs for the sub modules
+  - count_lines: count_lines
+  - embed_text: laser3
+  - train_index: train_faiss
+  - populate_index: populate_faiss
+  - merge_indexes: merge_faiss
+  - mine_indexes: base
+  - mine_sentences: base
+  - calculate_distances: base
+  - launcher: submitit
+  - _self_
+
+src_lang: ???
+tgt_lang: ???
+data: ???
+# you might want to set in a preset
+model_dir: ???
+vocab_dir: ???
+output_dir: ???
+embedding_dimensions: 1024
+mine_threshold: 1.04
+local_tmp_dir: /tmp
+
+embedding_sample:
+  max_num_workers: 40
+  sample_shards: True
+  sample_sz: 40_000_000
+
+max_shard_size: 0
+
+segment_audio: null
+
+#override the sub module configs with the parents
+split_in_shards:
+  config:
+    output_dir: ${output_dir}/split_langs.${data.data_version}
+embed_text:
+  config:
+    model_dir: ${model_dir}
+    vocab_dir: ${vocab_dir}
+    output_dir: ${output_dir}/embed.${data.data_version}
+    embedding_dimensions: ${embedding_dimensions}
+train_index:
+  config:
+    data: ${data}
+    output_dir: ${output_dir}/index.${data.data_version}
+    embedding_dimensions: ${embedding_dimensions}
+populate_index:
+  config:
+    output_dir: ${output_dir}/index.${data.data_version}
+    embedding_dimensions: ${embedding_dimensions}
+merge_indexes:
+  config:
+    data: ${data}
+    output_dir: ${output_dir}/index.${data.data_version}
+calculate_distances:
+  config:
+    output_dir: ${output_dir}/mine.${data.data_version}
+    embedding_dimensions: ${embedding_dimensions}
+mine_indexes:
+  config:
+    src_lang: ${src_lang}
+    tgt_lang: ${tgt_lang}
+    output_dir: ${output_dir}/mine.${data.data_version}
+    mine_threshold: ${mine_threshold}
+mine_sentences:
+  config:
+    data: ${data}
+    src_lang: ${src_lang}
+    tgt_lang: ${tgt_lang}
+    output_dir: ${output_dir}/mine.${data.data_version}
+    mine_threshold: ${mine_threshold}
+merge_shards:
+  _target_: stopes.modules.bitext.mining.merge_shards.MergeShardsModule
+  config:
+    src_lang: ${src_lang}
+    tgt_lang: ${tgt_lang}
+    output_dir: ${output_dir}/mine.${data.data_version}
+    pairs: null
+lang_configs:
+
+hydra:
+  job:
+    chdir: True
